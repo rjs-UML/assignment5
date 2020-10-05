@@ -1,9 +1,7 @@
 package edu.rseymour.advancedjava.apps.stockquote;
 
-import edu.rseymour.advancedjava.apps.stockquote.BasicStockQuoteApplication;
 import edu.rseymour.advancedjava.model.StockQuery;
 import edu.rseymour.advancedjava.model.StockQuote;
-import edu.rseymour.advancedjava.model.StockSymbol;
 import edu.rseymour.advancedjava.services.StockService;
 import edu.rseymour.advancedjava.services.StockServiceException;
 import org.junit.Before;

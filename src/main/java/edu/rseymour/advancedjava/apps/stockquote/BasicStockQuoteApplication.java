@@ -2,7 +2,7 @@ package edu.rseymour.advancedjava.apps.stockquote;
 
 import edu.rseymour.advancedjava.model.StockQuery;
 import edu.rseymour.advancedjava.model.StockQuote;
-import edu.rseymour.advancedjava.model.StockSymbol;
+import edu.rseymour.advancedjava.services.DatabaseStockService;
 import edu.rseymour.advancedjava.services.StockService;
 import edu.rseymour.advancedjava.services.StockServiceException;
 import edu.rseymour.advancedjava.services.StockServiceFactory;
@@ -63,7 +63,7 @@ public class BasicStockQuoteApplication {
     }
 
     /**
-     * Given a <CODE>stockQuery</CODE> get back a the info about the stock to display to th user.
+     * Given a <CODE>stockQuery</CODE> get back a the info about the stock to display to the user.
      *
      * @param stockQuery the stock to get data for.
      * @return a String with the stock data in it.
@@ -123,8 +123,8 @@ public class BasicStockQuoteApplication {
             exit(ProgramTerminationStatusEnum.ABNORMAL,
                     "Please supply 3 arguments a stock symbol, a start date (MM/DD/YYYY) and end date (MM/DD/YYYY)");
         }
-        try {
 
+        try {
             StockQuery stockQuery = new StockQuery(args[0], args[1], args[2]);
             StockService stockService = StockServiceFactory.getInstance();
             BasicStockQuoteApplication basicStockQuoteApplication =

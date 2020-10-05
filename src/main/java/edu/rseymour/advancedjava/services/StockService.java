@@ -1,7 +1,6 @@
 package edu.rseymour.advancedjava.services;
 
 import edu.rseymour.advancedjava.model.StockQuote;
-import edu.rseymour.advancedjava.model.StockSymbol;
 
 import java.util.Calendar;
 import java.util.List;
@@ -23,7 +22,6 @@ public interface StockService {
      *                               error.
      */
     StockQuote getQuote(String symbol) throws StockServiceException;
-    // accept an enum?
 
 
     /**

@@ -1,13 +1,12 @@
 package edu.rseymour.advancedjava.services;
 
 import edu.rseymour.advancedjava.model.StockQuote;
-import edu.rseymour.advancedjava.model.StockSymbol;
 import edu.rseymour.advancedjava.util.DatabaseConnectionException;
 import edu.rseymour.advancedjava.util.DatabaseUtils;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
-import java.sql.Date;
+import java.util.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -34,11 +33,13 @@ public class DatabaseStockService implements StockService {
     @Override
     public StockQuote getQuote(String symbol) throws StockServiceException {
         // todo - this is a pretty lame implementation why?
-        List<StockQuote> stockQuotes = null;
+        // Would rather get an empty list than an error.
+
+        List<StockQuote> stockQuotes;
         try {
             Connection connection = DatabaseUtils.getConnection();
             Statement statement = connection.createStatement();
-            String queryString = "select * from quotes where symbol = '" + symbol + "'";
+            String queryString = "select * from quotes where symbol = '" + symbol + "' order by time DESC LIMIT 1";
 
             ResultSet resultSet = statement.executeQuery(queryString);
             stockQuotes = new ArrayList<>(resultSet.getFetchSize());
@@ -53,7 +54,8 @@ public class DatabaseStockService implements StockService {
             throw new StockServiceException(exception.getMessage(), exception);
         }
         if (stockQuotes.isEmpty()) {
-            throw new StockServiceException("There is no stock data for:" + symbol);
+            stockQuotes.toArray();
+            // throw new StockServiceException("There is no stock data for:" + symbol);
         }
         return stockQuotes.get(0);
     }
@@ -70,7 +72,29 @@ public class DatabaseStockService implements StockService {
      * error.
      */
     @Override
-    public List<StockQuote> getQuote(String symbol, Calendar from, Calendar until) {
-        return null;
+    public List<StockQuote> getQuote(String symbol, Calendar from, Calendar until) throws StockServiceException {
+
+        List<StockQuote> stockQuotes;
+        try {
+            Connection connection = DatabaseUtils.getConnection();
+            Statement statement = connection.createStatement();
+            String queryString = "select * from quotes where symbol = '" + symbol + "' " +
+                    "AND time >= '" + from.getTime() + "' AND time <= '" + until.getTime() + "'";
+
+            ResultSet resultSet = statement.executeQuery(queryString);
+            stockQuotes = new ArrayList<>(resultSet.getFetchSize());
+            while(resultSet.next()) {
+                String symbolValue = resultSet.getString("symbol");
+                Date time = resultSet.getDate("time");
+                BigDecimal price = resultSet.getBigDecimal("price");
+
+                stockQuotes.add(new StockQuote(price, time, symbolValue));
+            }
+
+        } catch (DatabaseConnectionException | SQLException exception) {
+            throw new StockServiceException(exception.getMessage(), exception);
+        }
+
+        return stockQuotes;
     }
 }
