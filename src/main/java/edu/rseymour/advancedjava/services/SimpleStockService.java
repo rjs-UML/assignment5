@@ -1,7 +1,6 @@
 package edu.rseymour.advancedjava.services;
 
 import edu.rseymour.advancedjava.model.StockQuote;
-import edu.rseymour.advancedjava.model.StockSymbol;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
