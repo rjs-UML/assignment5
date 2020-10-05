@@ -3,6 +3,11 @@ jobs:
   build:
     docker:
       - image: 'circleci/openjdk:latest' # the primary container, where your job's commands are run
+      - image: circleci/mysql:8.0.21
+	environment:
+	  MYSQL_DATABASE: stocks
+	  MYSQL_USER: monty
+	  MYSQL_USER_PASSWORD: some_pass
     steps:
       - checkout # check out the code in the project directory
       - run: echo "hello cruel world" # run the `echo` command 
